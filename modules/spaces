@@ -1,5 +1,5 @@
 MARK_SPACES
-	e1 = <VAR_SPACE <CONST_SPACE <PROG_SPACE e1> > >
+	e1 = <VAR_SPACE <CONST_SPACE <PROCEDURE_SPACE <FUNCTION_SPACE <PROG_SPACE e1> > > > >
 
 PROG_SPACE
 	v(' ')1 'program' e2 = v1 <PROG_SPACE 'program' e2>
@@ -39,4 +39,12 @@ VAR_SECTION
 	/iden/(e1) e2 = <VAR_SECTION /section_var/(/iden/(e1)) e2 >
 	/section_var/(e1) ',' /iden/(e2) e3 = <VAR_SECTION /section_var/(e1 ',' /iden/(e2)) e3>
 	/section_var/(e1) ':' /type/(e2) ';' e3 = /section_var/(e1 ':' /type/(e2) ';') <VAR_SECTION e3>
+	e1 = e1
+
+PROCEDURE_SPACE
+	e1 ' procedure ' e2 /block/(e3) e4 = e1 /space_procedure/('procedure ' e2 /block/(e3)) <PROCEDURE_SPACE e4>
+	e1 = e1
+
+FUNCTION_SPACE
+	e1 ' function ' e2 /block/(e3) e4 = e1 /space_function/('function ' e2 /block/(e3)) <FUNCTION_SPACE e4> 
 	e1 = e1

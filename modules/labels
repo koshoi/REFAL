@@ -5,6 +5,8 @@ req START
 space_var
 space_const
 space_prog
+space_procedure
+space_function
 section_const
 section_var
 

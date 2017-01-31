@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives' 'end');
+file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives');
 
 echo '' > final.ref
 
@@ -12,5 +12,7 @@ for i in `seq 1 ${#file_arr[@]}`; do
 done
 
 cd ..
+
+echo 'END' >> final.ref
 
 cat file.pas | ./refal2 final.ref
