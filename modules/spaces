@@ -1,0 +1,42 @@
+MARK_SPACES
+	e1 = <VAR_SPACE <CONST_SPACE <PROG_SPACE e1> > >
+
+PROG_SPACE
+	v(' ')1 'program' e2 = v1 <PROG_SPACE 'program' e2>
+	'program' e1 ';' e2 = /space_prog/ ('program' <IDENTIFIER e1> ';') e2
+	e1 = <WARN_ERROR ('bad program space') (e1)>
+
+CONST_SPACE
+	e1 ' const ' e2 = e1 <CONST_SPACE 'const ' e2>
+	'const ' /section_const/ (e1) /nomatch/(e2) = /space_const/ ('const ' e1) e2
+	'const ' /nomatch/(e1) = <WARN_ERROR ('const space inited but empty') ('const ' e1)>
+	'const ' e2 = <CONST_SPACE 'const ' <CONST_SECTION e2> >
+	e1 = e1
+
+CONST_SECTION
+	v1 '=' v2 ';' e3 = <CONST_SECTION /section_const/ (<IDENTIFIER v1> '=' <CONSTANT v2> ';') <CONST_SECTION e3> >
+	/section_const/ (e1) /section_const/ (e2) e3 = <CONST_SECTION /section_const/ (e1 e2) e3 >
+	/section_const/ (e1) e2 = /section_const/ (e1) e2
+	e1 = /nomatch/(e1)
+
+VAR_SPACE
+	v1 ' var ' e2 = v1 <VAR_SPACE 'var ' e2>
+	/space_var/(e1) /section_var/(e2) e3 = <VAR_SPACE /space_var/(e1 /section_var/(e2)) e3 >
+	'var ' /section_var/(e1) e2 = <VAR_SPACE /space_var/('var ' /section_var/(e1)) e2  >
+	'var ' e2 = <VAR_SPACE 'var ' <VAR_SECTION <MARK_SECTION e2> > >
+	'var ' e1 =/space_var/('var') e1
+	/space_var/ e1 = /space_var/ e1
+	e1 = <WARN_ERROR ('no var space found') (e1)>
+
+MARK_SECTION
+	R v(' ')1 e2 = v1 <MARK_SECTION e2>
+	e1 ',' e2 ';' e3 = <IDENTIFIER e1> ',' <MARK_SECTION e2 ';'> <MARK_SECTION e3>
+	e1 ':' e2 ';' e3 = <IDENTIFIER e1> ':' <MARK_TYPE e2> ';' <MARK_SECTION e3>
+	e1 = e1
+
+VAR_SECTION
+	R v(' ')1 e2 = v1 <VAR_SECTION e2>
+	/iden/(e1) e2 = <VAR_SECTION /section_var/(/iden/(e1)) e2 >
+	/section_var/(e1) ',' /iden/(e2) e3 = <VAR_SECTION /section_var/(e1 ',' /iden/(e2)) e3>
+	/section_var/(e1) ':' /type/(e2) ';' e3 = /section_var/(e1 ':' /type/(e2) ';') <VAR_SECTION e3>
+	e1 = e1

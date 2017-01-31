@@ -1,0 +1,20 @@
+req START
+	EXTRN Prout, Card
+	ENTRY Go
+
+space_var
+space_const
+space_prog
+section_const
+section_var
+
+type
+iden
+const
+uconst
+logic
+block
+
+operation_sum
+
+nomatch

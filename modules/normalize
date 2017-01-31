@@ -1,0 +1,25 @@
+READ_WHILE
+	v1 = <NORMALIZE v1' '<READ_WHILE <CARD> > > 
+	= 
+
+NORMALIZE
+	e1 = <NORMSEPARATORS <NORMSPACES <NOTABS e1> > >
+
+NOTABS
+	e1'\t'e2 = e1 ' ' <NOTABS e2>
+	e1 = e1
+
+NORMSPACES
+	e1 s((' '))a v(' ')2 s((' '))b e3 = e1 sa ' ' <NORMSPACES sb e3>
+	e1 = e1
+
+NORMSEPARATORS
+	e1 = <LEFT_NORM <RIGHT_NORM e1> >
+
+LEFT_NORM
+	e1 s(',():')a v(' ')2 s((' '))b e3 = e1 sa <LEFT_NORM sb e3>
+	e1 = e1
+
+RIGHT_NORM
+	R e1 s((' '))a v(' ')2 s(',():;')b e3 = <RIGHT_NORM e1 sa> sb e3
+	e1 = e1

@@ -1,0 +1,37 @@
+BRACKETERIZE
+	e1 s((LD))a 'END' s(';.')b e2 = <BRACKETERIZE <LEFT_BRACKET e1 sa 'END' sb> e2>
+	e1 = e1
+
+LEFT_BRACKET
+	R e1 s((LD))a 'BEGIN' e2 'END' s(';.')b  = e1 sa /block/('BEGIN' e2 'END' sb)
+	e1 = <WARN_ERROR ('begin-end matching')(e1)>
+
+IDENTIFIER
+	R v(' ')1 e2 = v1 <IDENTIFIER e2>
+	R s(L)a e(LD'_')1 e2 = /iden/(sa e1) e2
+	e1 = <WARN_ERROR ('no identifier found') (e1)>
+
+CONSTANT
+	R v(' ')1 e2 = v1 <CONSTANT e2>
+	R s('+-')a v(D)1 e2 = /const/(sa v1) e2
+	R v(D)1 e2 = /const/(v1) e2
+	e1 = <WARN_ERROR ('no constant found') (e1)>
+
+UCONSTANT
+	R v(' ')1 e2 = v1 <UCONSTANT e2>
+	R v(D)1 e2 = /const/(v1) e2
+	e1 = <WARN_ERROR ('no uconstant found') (e1)>
+
+MARK_TYPE
+	R v(' ')1 e2 = <MARK_TYPE e2>
+	'integer' e1 = /type/('integer') e1
+	'boolean' e1 = /type/('boolean') e1
+	e1 = <WARN_ERROR ('bad type name') (e1)>
+
+MARK_LOGIC
+	'true' e1 = /logic/('true') e1
+	'false' e1 = /logic/('false') e1
+	e1 = <WARN_ERROR ('no logic value found') (e1)>
+
+SUM_OPERATION
+	e1 = e1

@@ -1,0 +1,16 @@
+GO 	
+	= <STRUCT_PRINT () <MARK_SPACES <BRACKETERIZE <READ_WHILE <NORMALIZE <CARD> > > > > >
+
+WARN_ERROR
+	(e1)(e2) = <PROUT '!!!ERROR ' e1 '\n' e2 '\n!!!\n'>
+	e1 = 
+
+STRUCT_PRINT
+	(e1) e2 s(F)a (e3) e4 = <PROUT e1 sa (e3)> <STRUCT_PRINT (e1 '>') e3> <STRUCT_PRINT (e1) e4>
+	e1 = 
+
+LAZY
+	e1 = e1
+
+VOID
+	e1 =
