@@ -6,6 +6,7 @@ WARN_ERROR
 	e1 = 
 
 STRUCT_PRINT
+	*e1 = <PROUT e1>
 	(e1) e2 s(F)a (e3) e4 = <PROUT e1 sa (e3)> <STRUCT_PRINT (<STRUCT_INC e1>) e3> <STRUCT_PRINT (e1) e4>
 	e1 = 
 
