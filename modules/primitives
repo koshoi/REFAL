@@ -1,9 +1,9 @@
 BRACKETERIZE
-	e1 s((LD))a 'END' s(';.')b e2 = <BRACKETERIZE <LEFT_BRACKET e1 sa 'END' sb> e2>
+	e1 w((LD))a 'END' s(';.')b e2 = <BRACKETERIZE <LEFT_BRACKET e1 wa 'END' sb> e2>
 	e1 = e1
 
 LEFT_BRACKET
-	R e1 s((LD))a 'BEGIN' e2 'END' s(';.')b  = e1 sa /block/('BEGIN' e2 'END' sb)
+	R e1 w((LD))a 'BEGIN' e2 'END' s(';.')b  = e1 wa /block/('BEGIN' e2 'END' sb)
 	e1 = <WARN_ERROR ('begin-end matching')(e1)>
 
 IDENTIFIER

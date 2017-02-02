@@ -1,5 +1,5 @@
 READ_WHILE
-	v1 = <NORMALIZE v1' '<READ_WHILE <CARD> > > 
+	v1 = v1' '<READ_WHILE <CARD> > 
 	= 
 
 NORMALIZE
@@ -17,9 +17,9 @@ NORMSEPARATORS
 	e1 = <LEFT_NORM <RIGHT_NORM e1> >
 
 LEFT_NORM
-	e1 s(',():')a v(' ')2 s((' '))b e3 = e1 sa <LEFT_NORM sb e3>
+	e1 s(',():;<>=+-')a v(' ')2 s((' '))b e3 = e1 sa <LEFT_NORM sb e3>
 	e1 = e1
 
 RIGHT_NORM
-	R e1 s((' '))a v(' ')2 s(',():;')b e3 = <RIGHT_NORM e1 sa> sb e3
+	R e1 s((' '))a v(' ')2 s(',():;<>=+-')b e3 = <RIGHT_NORM e1 sa> sb e3
 	e1 = e1
