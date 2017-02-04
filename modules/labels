@@ -17,6 +17,8 @@ uconst
 logic
 block
 
+operator_case
+
 operation_sum
 
 nomatch

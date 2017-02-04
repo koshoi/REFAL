@@ -21,8 +21,8 @@ CONST_SECTION
 
 VAR_SPACE
 	e1  w2 'var ' e3 = e1 w2 <VAR_SPACE 'var ' e3>
-	/space_var/(e1) e(' ')4 /section_var/(e2) e3 = <VAR_SPACE /space_var/(e1 /section_var/(e2)) e3 >
-	/space_var/(e1) e(' ')3 /nomatch/(e2) = /space_var/(e1) e2
+	/space_var/(e1) ';' /section_var/(e2) e3 = <VAR_SPACE /space_var/(e1 /section_var/(e2)) e3 >
+	/space_var/(e1) ';' /nomatch/(e2) = /space_var/(e1) e2
 	'var ' /section_var/(e1) e2 = <VAR_SPACE /space_var/('var ' /section_var/(e1)) e2  >
 	'var ' /nomatch/(e1) =/space_var/('var') e1
 	'var ' e1 = <VAR_SPACE 'var ' <VAR_SECTION <MARK_SECTION e1> > >
@@ -39,7 +39,7 @@ VAR_SECTION
 	R v(' ')1 e2 = v1 <VAR_SECTION e2>
 	/iden/(e1) e2 = <VAR_SECTION /section_var/(/iden/(e1)) e2 >
 	/section_var/(e1) ',' /iden/(e2) e3 = <VAR_SECTION /section_var/(e1 ',' /iden/(e2)) e3>
-	/section_var/(e1) ':' /type/(e2) ';' e3 = /section_var/(e1 ':' /type/(e2) ';') <VAR_SECTION e3>
+	/section_var/(e1) ':' /type/(e2) ';' e3 = /section_var/(e1 ':' /type/(e2)) ';' <VAR_SECTION e3>
 	e1 = /nomatch/(e1)
 
 PROCEDURE_SPACE
