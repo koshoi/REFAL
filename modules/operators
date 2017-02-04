@@ -9,3 +9,4 @@ MARK_CASES
 MARK_CASE_BEGIN
 	R  e1 s(' ;')a  'case' e2 = e1 sa /operator_case/('case' e2)
 	e1 = <WARN_ERROR ('case operator matching failure')(e1)>
+

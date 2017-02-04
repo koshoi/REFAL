@@ -16,8 +16,8 @@ begin
 	println (a);
 	println (b);
 	case (a) of
-		1 : writeln(a);
-		2 : writeln(b);
+		1 : writeln(a*b);
+		2 : writeln(b mod a);
 	endcase;
 	if (1 > 0)
 		begin

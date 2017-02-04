@@ -20,5 +20,10 @@ block
 operator_case
 
 operation_sum
+operation_mul
+operation_compare
+
+expression_simple
+expression
 
 nomatch

@@ -1,0 +1,8 @@
+MATCH_EXPRESSION
+	/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3) = /expression/(/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3))
+	/expression_simple/(e1) /operation_compare/(e2) e3 = <EXPRESSION /expression_simple/(e1) /operation_compare/(e2) <SIMPLE_EXPRESSION e2> >
+	/expression_simple/(e1) e2 = /expression/(e1)
+	e1 = <MATCH_EXPRESSION <SIMPLE_EXPRESSION e1> >
+
+SIMPLE_EXPRESSION
+	
