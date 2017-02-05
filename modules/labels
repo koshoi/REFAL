@@ -1,5 +1,5 @@
 req START
-	EXTRN Prout, Card
+	EXTRN Prout, Card, Br, Cp, Rp
 	ENTRY Go
 
 space_var
@@ -25,5 +25,7 @@ operation_compare
 
 expression_simple
 expression
+summand
+multiplier
 
 nomatch

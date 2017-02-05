@@ -7,7 +7,7 @@ PROG_SPACE
 	e1 = <WARN_ERROR ('bad program space') (e1)>
 
 CONST_SPACE
-	e1  s(' ;')a 'const ' e2 = e1 sa <CONST_SPACE 'const ' e2>
+	e1  wa 'const ' e2 = e1 wa <CONST_SPACE 'const ' e2>
 	'const ' /section_const/ (e1) /nomatch/(e2) = /space_const/ ('const ' e1) e2
 	'const ' /nomatch/(e1) = <WARN_ERROR ('const space inited but empty') ('const ' e1)>
 	'const ' e2 = <CONST_SPACE 'const ' <CONST_SECTION e2> >

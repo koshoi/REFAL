@@ -1,8 +1,31 @@
 MATCH_EXPRESSION
 	/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3) = /expression/(/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3))
 	/expression_simple/(e1) /operation_compare/(e2) e3 = <EXPRESSION /expression_simple/(e1) /operation_compare/(e2) <SIMPLE_EXPRESSION e2> >
-	/expression_simple/(e1) e2 = /expression/(e1)
-	e1 = <MATCH_EXPRESSION <SIMPLE_EXPRESSION e1> >
+	/expression_simple/(e1) e2 = /expression/(/expression_simple/(e1)) e2
+	e1 =<MATCH_EXPRESSION <SIMPLE_EXPRESSION e1> >
 
 SIMPLE_EXPRESSION
-	
+	/expression_simple/(e1) /operation_sum/(e2) /summand/(e3) e4 = <SIMPLE_EXPRESSION /expression_simple/(/expression_simple/(e1) /operation_sum/(e2) /summand/(e3)) e4 >
+	/expression_simple/(e1) /operation_sum/(e2) e3 = <SIMPLE_EXPRESSION /expression_simple/(e1) /operation_sum/(e2) <MATCH_SUMMAND e3> >
+	/expression_simple/(e1) e2 = /expression_simple/(e1) e2
+	/summand/(e1) e2 = <SIMPLE_EXPRESSION /expression_simple/(/summand/(e1)) e2 >
+	e1 = <SIMPLE_EXPRESSION <MATCH_SUMMAND e1> >
+
+MATCH_SUMMAND
+	/summand/(e1) /operation_mul/(e2) /multiplier/(e3) e4 = /summand/(/multiplier/(e1) /operation_mul/(e2) /multiplier/(e3)) e4
+	/summand/(e1) /operation_mul/(e2) e3 = <MATCH_SUMMAND /summand/(e1) /operation_mul/(e2) <MATCH_MULTIPLIER e3> >
+	/summand/(e1) e2 = /summand/(e1) e2
+	/multiplier/(e1) e2 = <MATCH_SUMMAND /summand/(/multiplier/(e1)) e2 >
+	e1 = <MATCH_SUMMAND <MATCH_MULTIPLIER e1> >
+
+MATCH_MULTIPLIER
+	/logic/(e1) e2 = /multiplier/(/logic/(e1)) e2
+	/iden/(e1) e2 = /multiplier/(/iden/(e1)) e2
+	/uconst/(e1) e2 = /multiplier/(/uconst/(e1)) e2
+	'not ' /multiplier/(e1) e2 = /multiplier/('not' /multiplier/(e1)) e2
+	'(' /expression/(e1) ')' e2 = /multiplier/('(' /expression/(e1) ')') e2
+	'(' /expression/(e1) e2 = <WARN_ERROR ('not matching brackets') ('(' /expression/(e1) e2) >
+	s(D)a e1 = <MATCH_MULTIPLIER <UCONSTANT sa e1> >
+	'(' e1 = <MATCH_MULTIPLIER '(' <MATCH_EXPRESSION e1> >
+	'not ' e1 = <MATCH_MULTIPLIER 'not ' <MATCH_MULTIPLIER e1> >
+	e1 = <MATCH_MULTIPLIER <IDENTIFIER e1> >

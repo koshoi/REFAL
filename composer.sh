@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives' 'operators');
+file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives' 'operations' 'operators' 'expressions' );
 
 echo '' > final.ref
 
@@ -15,4 +15,4 @@ cd ..
 
 echo 'END' >> final.ref
 
-cat file.pas | ./refal2 final.ref
+cat expressions.pas | ./refal2 final.ref

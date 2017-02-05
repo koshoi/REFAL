@@ -32,24 +32,3 @@ MARK_LOGIC
 	'true' e1 = /logic/('true') e1
 	'false' e1 = /logic/('false') e1
 	e1 = <WARN_ERROR ('no logic value found') (e1)>
-
-SUM_OPERATION
-	e1 s('+-')a e2 = <SUM_OPERATION e1> /operation_sum/(sa) <SUM_OPERATION e2>
-	e1 ' or ' e2 = e1 /operation_sum/('or') <SUM_OPERATION e2>
-	e1 = e1
-
-MUL_OPERATION
-	e1 ' div ' e2 = <MUL_OPERATION e1> /operation_mul/('div') <MUL_OPERATION e2>
-	e1 ' mod ' e2 = <MUL_OPERATION e1> /operation_mul/('mod') <MUL_OPERATION e2>
-	e1 ' and ' e2 = <MUL_OPERATION e1> /operation_mul/('and') <MUL_OPERATION e2>
-	e1 '*' e2 = e1 /operation_mul/('*') <MUL_OPERATION e2>
-	e1 = e1
-
-COMPARE_OPERATION
-	e1 '<>' e2 = <COMPARE_OPERATION e1> /operation_compare/('<>') <COMPARE_OPERATION e2>
-	e1 '<=' e2 = <COMPARE_OPERATION e1> /operation_compare/('<=') <COMPARE_OPERATION e2>
-	e1 '>=' e2 = <COMPARE_OPERATION e1> /operation_compare/('>=') <COMPARE_OPERATION e2>
-	e1 '<' e2 = <COMPARE_OPERATION e1> /operation_compare/('<') <COMPARE_OPERATION e2>
-	e1 '>' e2 = <COMPARE_OPERATION e1> /operation_compare/('>') <COMPARE_OPERATION e2>
-	e1 s((':'))a '=' e2 = e1 sa /operation_compare/('=') <COMPARE_OPERATION e2>
-	e1 = e1

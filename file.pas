@@ -1,7 +1,7 @@
 program test;
 const 
-const_a=4;
-const_b=5;
+const_a=-4;
+const_b=+5;
 var
 a, b, c : integer;
 test : boolean;
@@ -18,6 +18,7 @@ begin
 	case (a) of
 		1 : writeln(a*b);
 		2 : writeln(b mod a);
+		3 : writeln(b + a);
 	endcase;
 	if (1 > 0)
 		begin
