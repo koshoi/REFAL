@@ -1,6 +1,5 @@
 GO 	
-	= <BR 'output=open'> <STRUCT_PRINT () <MATCH_EXPRESSION <SUM_OPERATION <COMPARE_OPERATION <MUL_OPERATION <NORMALIZE <READ_WHILE <CARD> > > > > > > >
-	= <STRUCT_PRINT () <MARK_OPERATORS <MARK_IN_BLOCK <MARK_SPACES <BRACKETERIZE <MUL_OPERATION <NORMALIZE <READ_WHILE <CARD> > > > > > > > > 
+	= <BR 'output=open'> <PRETTY_PRINT () <MARK_OPERATORS <MARK_IN_BLOCK <MARK_SPACES <BRACKETERIZE <MUL_OPERATION <NORMALIZE <READ_WHILE <CARD> > > > > > > > > 
 
 WARN_ERROR
 	e1 = <WARN_ERROR2 (<CP 'output'>) e1 > <RP 'output=closed'>
@@ -9,10 +8,22 @@ WARN_ERROR2
 	('open')(e1)(e2) = <PROUT '!!!ERROR ' e1> <PROUT e2> <PROUT '!!!\n'>
 	e1 = 
 
+PRINT
+	('closed') e1 =
+	('open') e1 = <PROUT e1>
+	e1 = <PRINT (<CP 'output'>) e1>
+
 STRUCT_PRINT
-	*e1 = <PROUT e1>
-	(e1) e2 s(F)a (e3) e4 = <PROUT e1 sa (e3)> <STRUCT_PRINT (<STRUCT_INC e1>) e3> <STRUCT_PRINT (e1) e4>
+	(e1) e2 s(F)a (e3) e4 = <PRINT e1 sa (e3)> <STRUCT_PRINT (<STRUCT_INC e1>) e3> <STRUCT_PRINT (e1) e4>
 	e1 = 
+
+NOLABEL
+	e1 s(F)a (e2) e3 = e1 <NOLABEL e2 e3>
+	e1 = e1
+
+PRETTY_PRINT
+	(e1) e2 s(F)a (e3) e4 = <PRINT e1 sa '(' <NOLABEL e3> ')' > <PRETTY_PRINT (<STRUCT_INC e1>) e3> <PRETTY_PRINT (e1) e4>
+	e1 =  
 
 STRUCT_INC
 	= ' └─'

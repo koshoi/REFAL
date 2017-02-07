@@ -1,6 +1,38 @@
 MARK_OPERATORS
-	e1 /block/(e2) e3 = <MARK_OPERATORS e1> /block/(<MARK_OPERATORS e2>) <MARK_OPERATORS e3>
+	/block/(e1) = <MATCH_OPERATOR /block/(<MARK_CASES e1>) >
+	e1 /block/(e2) e3 = <MARK_OPERATORS e1> <MARK_OPERATORS /block/(e2)> <MARK_OPERATORS e3>
 	e1 = <MARK_CASES e1>
+
+INSIDE
+	'begin' e1 'end' = 'begin' <MATCH_OPERATOR e1> 'end'
+	e1 = e1
+
+WRAP_OPERATOR
+	e1 = /operator/(e1)
+
+MATCH_OPERATOR
+	s(' ;')a e1 = sa <MATCH_OPERATOR e1>
+	'until' s(' (')a e1 = 'until' sa e1
+	'then ' e1 = 'then' e1
+	'else '  e1 = 'else' e1
+	s(+
+		/operator_assignment/+
+		/operator_for/+
+		/operator_case/+
+		/operator_while/+
+		/operator_write/+
+		/operator_if/+
+		/operator_repeat/+
+		/operator_if/+
+	)a (e1) e2 = <WRAP_OPERATOR sa (e1) > <MATCH_OPERATOR e2>
+	'if' e(' ')1 e2 = <MATCH_OPERATOR <IF_OPERATOR 'if' e2> >
+	'writeln' e1 = <MATCH_OPERATOR <WRITE_OPERATOR 'writeln' e1> > 
+	'for ' e1 = <MATCH_OPERATOR <FOR_OPERATOR 'for ' e1> >
+	'while' s(' (')a e1 = <MATCH_OPERATOR <WHILE_OPERATOR 'while' sa e1> >
+	'repeat ' e1 = <MATCH_OPERATOR <REPEAT_OPERATOR 'repeat ' e1> >
+	/block/('begin' e1 'end') e2 = /operator/(/block/('begin' <MATCH_OPERATOR e1> 'end')) <MATCH_OPERATOR e2>
+	e(LD)1 ':=' e2 = <MATCH_OPERATOR <ASSIGNMENT_OPERATOR e1 ':=' e2> >
+	e1 = e1
 
 MARK_CASES
 	e1 ';' 'endcase' e2 = <MARK_CASE_BEGIN e1 ';' 'endcase'> <MARK_CASES e2>
@@ -9,4 +41,50 @@ MARK_CASES
 MARK_CASE_BEGIN
 	R  e1 s(' ;')a  'case' e2 = e1 sa /operator_case/('case' e2)
 	e1 = <WARN_ERROR ('case operator matching failure')(e1)>
+
+IF_OPERATOR
+	'if' /expression/(e1) e(' ')2 'then ' e3 = <IF_OPERATOR /expression/(e1) 'then' <MATCH_OPERATOR e3> > 
+	'if' /expression/(e1) e2 = <IF_OPERATOR 'if' /expression/(e1) <MATCH_OPERATOR e2> >
+	'if' e1 = <PRINT '1'> <IF_OPERATOR 'if' <MATCH_EXPRESSION e1> >
+
+WRITE_OPERATOR
+	'writeln(' /list/(e1) ')' e2 = /operator_write/('writeln' /list/(e1)) e2
+	'writeln(' /list/(e1) ',' /expression/(e2) e3 = <WRITE_OPERATOR 'writeln(' /list/(e1 ',' /expression/(e2)) e3>
+	'writeln(' /list/(e1) ',' e2 = <WRITE_OPERATOR 'writeln(' /list/(e1) ',' <MATCH_EXPRESSION e2> >
+	'writeln(' /list/(e1) e2 = <WARN_ERROR ('bad list for calling options') (e1 e2) >
+	'writeln(' /expression/(e1) e2 = <WRITE_OPERATOR 'writeln(' /list/(/expression/(e1)) e2>
+	'writeln()' e1 = <WARN_ERROR ('nothing to write') ('writeln()') >
+	'writeln(' e1 = <WRITE_OPERATOR 'writeln(' <MATCH_EXPRESSION e1> >
+	'writeln' e1 = <WARN_ERROR ('nothing to write') ('writeln' e1)>
+
+REPEAT_OPERATOR
+	'repeat ' /list/(e1) s(' ;')a 'until' /expression/(e2) e3 = +
+		<MATCH_OPERATOR /operator_repeat/('repeat ' /list/(e1) s(' ;')a 'until' /expression/(e2)) e3>
+	R 'repeat ' /list/(e1) s(' ;')a 'until' e(' ')2 e3 = <REPEAT_OPERATOR 'repeat ' /list/(e1) sa 'until' <MATCH_EXPRESSION e3> >
+	'repeat ' /list/(e1) ';'/operator/(e2) e3 = <REPEAT_OPERATOR 'repeat ' /list/(e1 ';' /operator/(e2)) e3>
+	'repeat ' /operator/(e1) e2 = <REPEAT_OPERATOR 'repeat ' /list/(/operator/(e1)) e2>
+	'repeat ' e1 = <REPEAT_OPERATOR 'repeat ' <MATCH_OPERATOR e1> >
+
+ASSIGNMENT_OPERATOR
+	/iden/(e1) ':=' /expression/(e2) e3 = /operator_assignment/(/iden/(e1) ':=' /expression/(e2)) e3
+	e1 ':=' e2 = <ASSIGNMENT_OPERATOR <IDENTIFIER e1> ':=' <MATCH_EXPRESSION e2> >
+	e1 = <WARN_ERROR ('wrong assignment operator') (e1)>
+
+FOR_OPERATOR
+	'for ' /operator_assignment/(e1) 'to' /expression/(e2) 'do' /operator/(e3) e4 = +
+		/operator_for/('for' /operator_assignment/(e1) 'to' /expression/(e2) 'do' /operator/(e3)) e4
+	R 'for ' /operator_assignment/(e1) 'to' /expression/(e2) e(' ')3 'do' e(' ')4 e5 = +
+		<FOR_OPERATOR 'for '/operator_assignment/(e1) 'to' /expression/(e2) 'do' <MATCH_OPERATOR e5> >
+	R 'for ' /operator_assignment/(e1) e(' ')2 'to' e(' ')3 e4 = <FOR_OPERATOR 'for ' /operator_assignment/(e1) 'to' <MATCH_EXPRESSION e4> >
+	'for ' e(LD)1 ':=' e2 = <FOR_OPERATOR 'for ' <ASSIGNMENT_OPERATOR e1 ':=' e2> >
+	e1 = <WARN_ERROR ('bad for operator') (e1)>
+
+WHILE_OPERATOR
+	'while' /expression/(e1) 'do' /operator/(e2) e3 = +
+		/operator_while/('while' /expression/(e1) 'do' /operator/(e2)) e3
+	R 'while' /expression/(e1) e(' ')2 'do' e(' ')3 e4 = +
+		<WHILE_OPERATOR 'while' /expression/(e1) 'do' <MATCH_OPERATOR e4> >
+	'while(' e1 = <WHILE_OPERATOR 'while' <MATCH_EXPRESSION '(' e1> >
+	'while ' e1 = <PRINT '1'> <WHILE_OPERATOR 'while' <MATCH_EXPRESSION e1> >
+	e1 = <WARN_ERROR ('bad operator while')(e1)>
 

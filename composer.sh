@@ -15,4 +15,4 @@ cd ..
 
 echo 'END' >> final.ref
 
-cat expressions.pas | ./refal2 final.ref
+cat file.pas | ./refal2 final.ref

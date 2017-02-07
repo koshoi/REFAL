@@ -15,9 +15,18 @@ iden
 const
 uconst
 logic
+list
 block
 
+operator
 operator_case
+operator_assignment
+operator_for
+operator_while
+operator_repeat
+operator_if
+operator_write
+operator_procedure
 
 operation_sum
 operation_mul
@@ -27,5 +36,8 @@ expression_simple
 expression
 summand
 multiplier
+function_call
+procedure_call
+options
 
 nomatch

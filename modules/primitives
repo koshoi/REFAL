@@ -19,7 +19,7 @@ CONSTANT
 
 UCONSTANT
 	R v(' ')1 e2 = v1 <UCONSTANT e2>
-	R v(D)1 e2 = /const/(v1) e2
+	R v(D)1 e2 = /uconst/(v1) e2
 	e1 = <WARN_ERROR ('no uconstant found') (e1)>
 
 MARK_TYPE

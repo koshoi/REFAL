@@ -1,8 +1,8 @@
 MATCH_EXPRESSION
-	/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3) = /expression/(/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3))
-	/expression_simple/(e1) /operation_compare/(e2) e3 = <EXPRESSION /expression_simple/(e1) /operation_compare/(e2) <SIMPLE_EXPRESSION e2> >
+	/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3) e4 = /expression/(/expression_simple/(e1) /operation_compare/(e2) /expression_simple/(e3)) e4
+	/expression_simple/(e1) /operation_compare/(e2) e3 = <MATCH_EXPRESSION /expression_simple/(e1) /operation_compare/(e2) <SIMPLE_EXPRESSION e3> >
 	/expression_simple/(e1) e2 = /expression/(/expression_simple/(e1)) e2
-	e1 =<MATCH_EXPRESSION <SIMPLE_EXPRESSION e1> >
+	e1 = <MATCH_EXPRESSION <SIMPLE_EXPRESSION e1> >
 
 SIMPLE_EXPRESSION
 	/expression_simple/(e1) /operation_sum/(e2) /summand/(e3) e4 = <SIMPLE_EXPRESSION /expression_simple/(/expression_simple/(e1) /operation_sum/(e2) /summand/(e3)) e4 >
@@ -20,6 +20,8 @@ MATCH_SUMMAND
 
 MATCH_MULTIPLIER
 	/logic/(e1) e2 = /multiplier/(/logic/(e1)) e2
+	/iden/(e1) '(' e2 ')' e3 = <MATCH_MULTIPLIER /iden/(e1) <CALL_OPTIONS e2> e3>
+	/iden/(e1) /options/(e2) e3 = /multiplier/(/function_call/(/iden/(e1) /options/(e2))) e3
 	/iden/(e1) e2 = /multiplier/(/iden/(e1)) e2
 	/uconst/(e1) e2 = /multiplier/(/uconst/(e1)) e2
 	'not ' /multiplier/(e1) e2 = /multiplier/('not' /multiplier/(e1)) e2
@@ -29,3 +31,12 @@ MATCH_MULTIPLIER
 	'(' e1 = <MATCH_MULTIPLIER '(' <MATCH_EXPRESSION e1> >
 	'not ' e1 = <MATCH_MULTIPLIER 'not ' <MATCH_MULTIPLIER e1> >
 	e1 = <MATCH_MULTIPLIER <IDENTIFIER e1> >
+
+CALL_OPTIONS
+	/expression/(e1) e2 = <CALL_OPTIONS /options/(/expression/(e1)) e2>
+	/options/(e1) e(' ')2 = /options/(e1)
+	/options/(e1) ',' /options/(e2) e3 = <PROUT '3' e3> <CALL_OPTIONS /options/(e1 ',' e2) e3>
+	/options/(e1) ',' v2 = <CALL_OPTIONS /options/(e1) ',' <CALL_OPTIONS v2> >
+	/options/(e1) ',' = <WARN_ERROR ('extra coma') (/options/(e1)',')>
+	=
+	e1 = <CALL_OPTIONS <MATCH_EXPRESSION e1> >
