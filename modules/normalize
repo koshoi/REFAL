@@ -11,6 +11,7 @@ NOTABS
 
 NORMSPACES
 	e1 s((' '))a v(' ')2 s((' '))b e3 = e1 sa ' ' <NORMSPACES sb e3>
+	e1 '.' v(' ')2 = e1 '.'
 	e1 = e1
 
 NORMSEPARATORS

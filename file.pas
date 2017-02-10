@@ -6,8 +6,9 @@ var
 function proc1 (a, b : integer; var c:integer; i:boolean) : integer
 	var aa, bb: integer;
 begin
-	writeln(a);
+	writeln(a)
 end;
 begin
-	a:=func1();
+	proc1();
+	a:=ba()
 end.

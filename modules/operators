@@ -57,7 +57,7 @@ MARK_CASE_BEGIN
 	e1 = <WARN_ERROR ('case operator matching failure')(e1)>
 
 PROCEDURE_OPERATOR
-	/iden/(e1) /options/(e2) ')' e3 = /operator_procedure/(/iden/(e1) /options/(e2)) e3
+	/iden/(e1) /options/(e2) e3 = /operator_procedure/(/iden/(e1) /options/(e2)) e3
 	/iden/(e1) '(' e2 = <PROCEDURE_OPERATOR /iden/(e1) <CALL_OPTIONS e2> >
 	e1 '(' e2 =  <PROCEDURE_OPERATOR <IDENTIFIER e1> '(' e2 >
 

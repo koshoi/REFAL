@@ -1,13 +1,39 @@
 NORMTERMS
 	R e1 v(' ')2 s(F)a (e3) e4 = <NORMTERMS e1 sa (<NORMTERMS e3>) e4>
-	e1 (e2) v(' ')3 e4 = e1 <NORMTERMS (<NORMTERMS e2>) e4>
+	e1 (e2) v(' ')3 e4 = <NORMTERMS e1 (<NORMTERMS e2>) e4>
+	e1 (e2) e3 = e1 (<NORMTERMS e2>) <NORMTERMS e3>
 	e1 = e1
 
 CHECK_STRUCTURE
-	/space_prog/(e1)';'/space_const/(e2)/space_var/(e3) e4 = /space_prog/(e1)';'/space_const/(e2)';'/space_var/(e3) <CHECK_FP e4>
-	/space_prog/(e1)';'/space_var/(e2) e3 = /space_prog/(e1)';'/space_var/(e2) <CHECK_FP e3>
+	/space_prog/(e1)';'/space_const/(e2)/space_var/(e3) e4 /operator/(e5) '.' = + 
+		/space_prog/(e1)';'/space_const/(e2)';'/space_var/(e3) <CHECK_FP e4 /operator/(e5)>
+	/space_prog/(e1)';'/space_var/(e2) e3 /operator/(e4) '.' = +
+		/space_prog/(e1)';'/space_var/(e2) <CHECK_FP e3 /operator/(e4)>
 	e1 = <WARN_ERROR ('bad overall structure') (e1)>
 
 CHECK_FP
-	*/space_function/(e1) e2
-	e1 = e1 <PRINT e1>
+	/space_function/(e1) e2 = /space_function/(<CHECK_FUNCTION e1>) <CHECK_FP e2>
+	/space_procedure/(e1) e2 = /space_procedure/(<CHECK_PROCEDURE e1>) <CHECK_FP e2>
+	';' e1 = ';' <CHECK_OPERATORS e1>
+
+CHECK_PROCEDURE
+	'procedure' /iden/(e1) e2 /space_var/(e3) /operator/(e4) = +
+		'procedure' /iden/(e1) <CHECK_PARAMS e2> /space_var/(e3) <CHECK_PARAMS /operator/(e4)>
+	e1 = <WARN_ERROR ('bad structure of proc definition') (e1)>
+
+CHECK_FUNCTION
+	'function' /iden/(e1) e2 ':' /type/(e3) /space_var/(e4) /operator/(e5) = +
+		'function' /iden/(e1) <CHECK_PARAMS e2> ':' /type/(e3) /space_var/(e4) <CHECK_OPERATORS /operator/(e5)>
+	e1 = <WARN_ERROR ('bad structure of func definition') (e1)>
+
+CHECK_PARAMS
+	/section_param/(e1) = /section_param/(e1)
+	/section_param/(e1) ';' e2 = /section_param/(e1) ';' <CHECK_PARAMS e2>
+	e1 = <WARN_ERROR ('expected section of params') (e1)>
+
+CHECK_OPERATORS
+	/operator/(/block/('begin' e1 'end')) = /operator/(/block/('begin' <CHECK_OPERATORS e1> 'end'))
+	/operator/(e1) ';' e2 = <CHECK_OPERATORS /operator/(e1)> ';' <CHECK_OPERATORS e2>
+	/operator/(e1) '.' = /operator/(e1) '.'
+	/operator/(e1) = /operator/(e1)
+	e1 = <PRETTY_PRINT () e1> <WARN_ERROR ('expected operator') (e1)>

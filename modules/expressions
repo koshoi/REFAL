@@ -34,9 +34,9 @@ MATCH_MULTIPLIER
 
 CALL_OPTIONS
 	/expression/(e1) e2 = <CALL_OPTIONS /options/(/expression/(e1)) e2>
-	/options/(e1) ')' e2 = /options/(e1) ')' e2
+	/options/(e1) ')' e2 = /options/(e1)  e2
 	/options/(e1) ',' /options/(e2) e3 = <CALL_OPTIONS /options/(e1 ',' e2) e3>
 	/options/(e1) ',' v2 = <CALL_OPTIONS /options/(e1) ',' <CALL_OPTIONS v2> >
 	/options/(e1) ',' = <WARN_ERROR ('extra coma') (/options/(e1)',')>
-	')' e2 = /options/() ')' e2
+	')' e2 = /options/()  e2
 	e1 = <CALL_OPTIONS <MATCH_EXPRESSION e1> >

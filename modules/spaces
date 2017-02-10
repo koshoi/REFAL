@@ -44,7 +44,7 @@ VAR_SECTION
 
 PROCEDURE_SPACE
 	e1 wa 'procedure ' e2 /block/(e3) e4 = +
-		e1 wa /space_procedure/('procedure ' <PROCEDURE_DESCRIPTION e2> <MATCH_OPERATOR /block/(e3)>) <PROCEDURE_SPACE e4>
+		e1 wa /space_procedure/('procedure' <PROCEDURE_DESCRIPTION e2> <MATCH_OPERATOR /block/(e3)>) <PROCEDURE_SPACE e4>
 	e1 = e1
 
 PROCEDURE_DESCRIPTION
@@ -68,7 +68,7 @@ MARK_PARAMS
 
 FUNCTION_SPACE
 	e1 wa 'function ' e2 /block/(e3) e4 = +
-		e1 wa /space_function/('function ' <FUNCTION_DESCRIPTION e2> <MATCH_OPERATOR /block/(e3)>) <FUNCTION_SPACE e4> 
+		e1 wa /space_function/('function' <FUNCTION_DESCRIPTION e2> <MATCH_OPERATOR /block/(e3)>) <FUNCTION_SPACE e4> 
 	e1 = e1
 
 FUNCTION_DESCRIPTION

@@ -1,0 +1,6 @@
+START_BURRY
+	e1 = <BR 'current=main'> <BURRY_IDENTIFIERS e1>
+
+BURRY_IDENTIFIERS
+	e1 /space_const/('const' e2) e3 = e1 /space_const/('const' <BURRY_CONSTANTS e2>) <BURRY_IDENTIFIERS e3>
+	e1 /space_var/('var' e2) e3 = e1 /space_var/('var' e2) e3
