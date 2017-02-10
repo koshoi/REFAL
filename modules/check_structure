@@ -1,0 +1,13 @@
+NORMTERMS
+	R e1 v(' ')2 s(F)a (e3) e4 = <NORMTERMS e1 sa (<NORMTERMS e3>) e4>
+	e1 (e2) v(' ')3 e4 = e1 <NORMTERMS (<NORMTERMS e2>) e4>
+	e1 = e1
+
+CHECK_STRUCTURE
+	/space_prog/(e1)';'/space_const/(e2)/space_var/(e3) e4 = /space_prog/(e1)';'/space_const/(e2)';'/space_var/(e3) <CHECK_FP e4>
+	/space_prog/(e1)';'/space_var/(e2) e3 = /space_prog/(e1)';'/space_var/(e2) <CHECK_FP e3>
+	e1 = <WARN_ERROR ('bad overall structure') (e1)>
+
+CHECK_FP
+	*/space_function/(e1) e2
+	e1 = e1 <PRINT e1>

@@ -3,7 +3,7 @@ MARK_SPACES
 
 PROG_SPACE
 	v(' ')1 'program' e2 = v1 <PROG_SPACE 'program' e2>
-	'program' e1 ';' e2 = /space_prog/ ('program' <IDENTIFIER e1> ';') e2
+	'program' e1 ';' e2 = /space_prog/ ('program' <IDENTIFIER e1>) ';' e2
 	e1 = <WARN_ERROR ('bad program space') (e1)>
 
 CONST_SPACE
@@ -43,9 +43,33 @@ VAR_SECTION
 	e1 = /nomatch/(e1)
 
 PROCEDURE_SPACE
-	e1 wa 'procedure ' e2 /block/(e3) e4 = e1 wa /space_procedure/('procedure ' e2 /block/(e3)) <PROCEDURE_SPACE e4>
+	e1 wa 'procedure ' e2 /block/(e3) e4 = +
+		e1 wa /space_procedure/('procedure ' <PROCEDURE_DESCRIPTION e2> <MATCH_OPERATOR /block/(e3)>) <PROCEDURE_SPACE e4>
 	e1 = e1
 
+PROCEDURE_DESCRIPTION
+	e1 = <VAR_SPACE <MARK_OPTIONS e1 > >
+
+MARK_OPTIONS
+	e1 '(' e2 ')' e3 = <IDENTIFIER e1> <MARK_PARAMS e2> e3
+	e1 = <WARN_ERROR ('did not find any parametrs here') (e1)>
+
+MARK_PARAMS
+	= /params/()
+	s(/params//var_params/)a(e1) ',' /iden/(e2) e3 = <MARK_PARAMS sa (e1 ',' /iden/(e2)) e3>
+	s(/params//var_params/)a(e1) ',' e2 = <MARK_PARAMS sa (e1) ',' <IDENTIFIER e2> >
+	s(/params//var_params/)a(e1) ':' /type/(e2) = /section_param/(sa (e1) ':' /type/(e2))
+	s(/params//var_params/)a(e1) ':' /type/(e2) ';' e3 = /section_param/(sa (e1) ':' /type/(e2)) ';' <MARK_PARAMS e3>
+	s(/params//var_params/)a(e1) ':' e2 = <MARK_PARAMS sa (e1) ':' <MARK_TYPE e2> >
+	'var' /iden/(e1) e2 = <MARK_PARAMS /var_params/(/iden/(e1)) e2> 
+	/iden/(e1) e2 = <MARK_PARAMS /params/(/iden/(e1)) e2> 
+	'var ' e1 = <MARK_PARAMS 'var' <IDENTIFIER e1> >
+	e1 = <MARK_PARAMS <IDENTIFIER e1> >
+
 FUNCTION_SPACE
-	e1 wa 'function ' e2 /block/(e3) e4 = e1 wa /space_function/('function ' e2 /block/(e3)) <FUNCTION_SPACE e4> 
+	e1 wa 'function ' e2 /block/(e3) e4 = +
+		e1 wa /space_function/('function ' <FUNCTION_DESCRIPTION e2> <MATCH_OPERATOR /block/(e3)>) <FUNCTION_SPACE e4> 
 	e1 = e1
+
+FUNCTION_DESCRIPTION
+	e1 '):' e2 = <VAR_SPACE <MARK_OPTIONS e1 ')'> ':' <MARK_TYPE e2> >

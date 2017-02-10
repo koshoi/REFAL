@@ -1,10 +1,13 @@
 program test;
-const 
-const_a=-4;
-const_b=+5;
+const
+	a=4;
+	b=2;
 var
-a, b, c : integer;
-test :                   boolean;
+function proc1 (a, b : integer; var c:integer; i:boolean) : integer
+	var aa, bb: integer;
 begin
-	if (a>b) then writeln(a) else writeln(b);
+	writeln(a);
+end;
+begin
+	a:=func1();
 end.

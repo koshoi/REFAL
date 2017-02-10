@@ -16,6 +16,7 @@ const
 uconst
 logic
 list
+variant
 block
 
 operator
@@ -38,6 +39,9 @@ summand
 multiplier
 function_call
 procedure_call
+params
+var_params
+section_param
 options
 
 nomatch
