@@ -1,5 +1,6 @@
 SPECIAL_CHECK
-	e1 /operator/(/block/(e2)) e3 = <SPECIAL_CHECK e1> /operator/(/block/(<SYNTAX_CHECK e2>)) <SPECIAL_CHECK e3>
+	e1 /iden/(e2) e3 = <CHANGE_VIEW e2> <SPECIAL_CHECK e3> <CHANGE_VIEW 'main'>
+	e1 /operator/(/block/(e2)) e3 = <SPECIAL_CHECK e1> /operator/(/block/(<EXPRESSION_CHECK <SYNTAX_CHECK e2>>)) <SPECIAL_CHECK e3>
 	e1 s(/space_function//space_procedure/)a (e2) e3 = e1 sa(<SPECIAL_CHECK e2>) <SPECIAL_CHECK e3>
 	e1 = e1
 
@@ -12,7 +13,7 @@ POP_STACK
 	= <POP_STACK (<CP 'untouchable'>)>
 
 UNTOUCHABILITY
-	(e1) (e1 ';' e2) = <WARN_ERROR ('changing untouchable variable') (e1)>
+	(e1) (e1 ';' e2) = <WARN_ERROR ('changing or passing untouchable variable as var option') (e1)>
 	(e1) (e2';'e3) = <UNTOUCHABILITY (e1) (e3)>
 	(e1) () = <NOT_CONSTANT e1>
 	e1 = <UNTOUCHABILITY (e1) (<CP 'untouchable'>) >
@@ -20,7 +21,7 @@ UNTOUCHABILITY
 EXISTENCE
 	() (e1) = <WARN_ERROR ('unexisting identifier') (e1)>
 	(v1) (e2) = 
-	e1 = <EXISTENCE (<CP 'const_' e1> <CP 'func_' e1> <CP 'proc_' e1> <CP 'var_' <CP 'view'> '_' e1>) (e1) >
+	e1 = <EXISTENCE (<CP 'const_' e1> <CP 'func_' e1> <CP 'proc_' e1> <CP 'var_' <CP 'view'> '_' e1> <CP 'var_main_' e1>) (e1) >
 
 VARIABLE
 	() (e1) = <WARN_ERROR ('not a variable') (e1)>
@@ -38,11 +39,11 @@ FUNCTION
 	e1 = <FUNCTION (<CP 'func_' e1>) (e1)>
 
 VAR_POSSIBLE
-	/expression/(/expression_simple/(/summand/(/multiplier/(/iden/(e1))))) =
+	/expression/(/expression_simple/(/summand/(/multiplier/(/iden/(e1))))) = <UNTOUCHABILITY e1>
 	e1 = <WARN_ERROR ('this expression can not be passed through var option') (e1)>
 
 NOT_CONSTANT
-	(v1) (e2) = <WARN_ERROR ('constant assignment') (e2)>
+	(v1) (e2) = <WARN_ERROR ('constant assignment or constant as var option') (e2)>
 	() (e1) = 
 	e1 = <NOT_CONSTANT (<CP 'const_' e1>) (e1)>
 
@@ -54,13 +55,19 @@ SYNTAX_CHECK
 	e1 /operator/(e2) e3 = e1 <SYNTAX_CHECK /operator/(e2) e3>
 	e1 = e1
 
+EXPRESSION_CHECK
+	/function_call/(e1) e2 = /function_call/(<FUNC_CHECK e1>) <EXPRESSION_CHECK e2>
+	/iden/(e1) e2 = /iden/(e1) <EXISTENCE e1> <EXPRESSION_CHECK e2>
+	e1 s(F)a (e2) e3 = e1 sa (<EXPRESSION_CHECK e2>) <EXPRESSION_CHECK e3>
+	e1 = e1
+
 FOR_CHECK
 	/operator_assignment/(/iden/(e1) e2) e3 'do' /operator/(e4) = +
 		<SYNTAX_CHECK /operator_assignment/(/iden/(e1) e2)> e3 <PUSH_STACK e1> 'do' <SYNTAX_CHECK /operator/(e4)> <POP_STACK>
 	e1 = e1 <PRINT 'for-->'e1> 
 
 ASSIGNMENT_CHECK
-	/iden/(e1) e2 = /iden/(e1) e2 <UNTOUCHABILITY e1> <EXISTENCE e1> <VARIABLE e1>
+	/iden/(e1) ':=' e2 = /iden/(e1) ':=' e2 <UNTOUCHABILITY e1> <EXISTENCE e1> <VARIABLE e1>
 
 PROC_CHECK
 	/iden/(e1) /options/(e2) = <EXISTENCE e1> <PROCEDURE e1> <OPTIONS_CHECK (<CP 'proc_' e1>) (e2)> /iden/(e1) /options/(e2)
