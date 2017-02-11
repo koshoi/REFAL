@@ -3,12 +3,15 @@ const
 	a=4;
 	b=2;
 var
-function proc1 (a, b : integer; var c:integer; i:boolean) : integer
-	var aa, bb: integer;
+	aa, bb, i : integer;
+	cc : boolean;
+procedure proc1(var aa: integer)
+var
 begin
-	writeln(a)
+	writeln(aa);
 end;
 begin
-	proc1();
-	a:=ba()
+	for i:=1 to 10 do aa:=b;
+	i:=1;
+	proc1(a);
 end.

@@ -14,11 +14,12 @@ CHECK_STRUCTURE
 CHECK_FP
 	/space_function/(e1) e2 = /space_function/(<CHECK_FUNCTION e1>) <CHECK_FP e2>
 	/space_procedure/(e1) e2 = /space_procedure/(<CHECK_PROCEDURE e1>) <CHECK_FP e2>
-	';' e1 = ';' <CHECK_OPERATORS e1>
+	';' e1 = ';' <CHECK_FP e1>
+	e1 = <CHECK_OPERATORS e1>
 
 CHECK_PROCEDURE
 	'procedure' /iden/(e1) e2 /space_var/(e3) /operator/(e4) = +
-		'procedure' /iden/(e1) <CHECK_PARAMS e2> /space_var/(e3) <CHECK_PARAMS /operator/(e4)>
+		'procedure' /iden/(e1) <CHECK_PARAMS e2> /space_var/(e3) <CHECK_OPERATORS /operator/(e4)>
 	e1 = <WARN_ERROR ('bad structure of proc definition') (e1)>
 
 CHECK_FUNCTION
@@ -36,4 +37,5 @@ CHECK_OPERATORS
 	/operator/(e1) ';' e2 = <CHECK_OPERATORS /operator/(e1)> ';' <CHECK_OPERATORS e2>
 	/operator/(e1) '.' = /operator/(e1) '.'
 	/operator/(e1) = /operator/(e1)
-	e1 = <PRETTY_PRINT () e1> <WARN_ERROR ('expected operator') (e1)>
+	=
+	e1 = <WARN_ERROR ('expected operator') (e1)>

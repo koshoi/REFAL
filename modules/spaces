@@ -55,7 +55,7 @@ MARK_OPTIONS
 	e1 = <WARN_ERROR ('did not find any parametrs here') (e1)>
 
 MARK_PARAMS
-	= /params/()
+	= /section_param/(/params/())
 	s(/params//var_params/)a(e1) ',' /iden/(e2) e3 = <MARK_PARAMS sa (e1 ',' /iden/(e2)) e3>
 	s(/params//var_params/)a(e1) ',' e2 = <MARK_PARAMS sa (e1) ',' <IDENTIFIER e2> >
 	s(/params//var_params/)a(e1) ':' /type/(e2) = /section_param/(sa (e1) ':' /type/(e2))

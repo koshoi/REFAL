@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives' 'operations' 'operators' 'expressions' 'check_structure' );
+file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives' 'operations' 'operators' 'expressions' 'check_structure' 'burry_identifiers' 'special_check');
 
 echo '' > final.ref
 

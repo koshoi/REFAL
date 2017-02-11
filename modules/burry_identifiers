@@ -1,6 +1,93 @@
 START_BURRY
-	e1 = <BR 'current=main'> <BURRY_IDENTIFIERS e1>
+	e1 = <CHANGE_VIEW 'main'> <BURRY_IDENTIFIERS e1>
+
+CHANGE_VIEW
+	e1 = <RP 'view=' e1>
 
 BURRY_IDENTIFIERS
 	e1 /space_const/('const' e2) e3 = e1 /space_const/('const' <BURRY_CONSTANTS e2>) <BURRY_IDENTIFIERS e3>
-	e1 /space_var/('var' e2) e3 = e1 /space_var/('var' e2) e3
+	e1 /space_var/('var' e2) e3 = e1 /space_var/('var' <BURRY_VARS e2>) <BURRY_IDENTIFIERS e3>
+	e1 = <BURRY_FP e1>
+
+BURRY_CONSTANTS
+	/iden/(e1)'='/const/(e2) ';' e3 = <BR_CONST (e1) (e2)> /iden/(e1) '=' /const/(e2) ';' <BURRY_CONSTANTS e3> 
+	e1 = e1
+
+BURRY_VARS
+	/section_var/(e1) e2 = /section_var/(<BURRY_SECTION e1>) <BURRY_VARS e2>
+	e1 = e1
+
+BURRY_SECTION
+	/iden/(e1) ',' e2 ':' /type/(e3) = <BR_VAR (e1) (e3)> /iden/(e1) ',' <BURRY_SECTION e2 ':' /type/(e3)>
+	/iden/(e1) ':' /type/(e2) = <BR_VAR (e1) (e2)> /iden/(e1) ':' /type/(e2)
+	e1 = e1
+
+BURRY_FP
+	/space_function/('function' e1) e2 = /space_function/('function' <BURRY_FUNCTION e1>) <BURRY_FP e2>
+	/space_procedure/('procedure' e1) e2 = /space_procedure/('procedure' <BURRY_PROCEDURE e1>) <BURRY_FP e2>
+	';' e1 = ';' <BURRY_FP e1>
+	e1 = e1
+
+BURRY_FUNCTION
+	/iden/(e1) e2 ':' /type/(e3) e4 = + 
+		<CHANGE_VIEW e1> <BR_FUNC (e1) (e3)> <BURRY_FDESCRIPTION e2 ':' /type/(e3)> /iden/(e1) <BURRY_FUNCTION e2> ':' /type/(e3) <BURRY_FUNCTION e4>
+	/section_param/(e1) ';' e2 = /section_param/(<BURRY_PARAMS e1>) ';' <BURRY_FUNCTION e2>
+	/section_param/(e1) e2 = /section_param/(<BURRY_PARAMS e1>) <BURRY_FUNCTION e2>
+	/space_var/('var' e1) e2 = /space_var/(e1)('var' <BURRY_VARS e1>) <BURRY_FUNCTION e2>
+	e1 = <CHANGE_VIEW 'main'> e1
+
+BURRY_FDESCRIPTION
+	';' e1 = <BURRY_FDESCRIPTION e1>
+	/section_param/(e1) ':' /type/(e2) = <BURRY_FDESCRIPTION e1>
+	/section_param/(e1) e2 = <PRINT e2> <BURRY_FDESCRIPTION e1> <BURRY_FDESCRIPTION e2>
+	/params/(e4 /iden/(e1) e2) ':' /type/(sa e3) = + 
+		<APPEND_DESCRIPTION ('func_' <CP 'view'>) (sa)> <BURRY_FDESCRIPTION /params/(e2) ':' /type/(sa e3)>
+	/var_params/(e4 /iden/(e1) e2) ':' /type/(sa e3) = + 
+		<APPEND_DESCRIPTION ('func_' <CP 'view'>) ('v' sa)> <BURRY_FDESCRIPTION /var_params/(e2) ':' /type/(sa e3)>
+	e1 = e1 
+
+BURRY_PROCEDURE
+	/iden/(e1) e2 = /iden/(e1) <CHANGE_VIEW e1> <BURRY_PDESCRIPTION e2> <BURRY_PROCEDURE e2>
+	/section_param/(e1) ';' e2 = /section_param/(<BURRY_PARAMS e1>) ';' <BURRY_PROCEDURE e2>
+	/section_param/(e1) e2 = /section_param/(<BURRY_PARAMS e1>) <BURRY_PROCEDURE e2>
+	/space_var/('var' e1) e2 = /space_var/(e1)('var' <BURRY_VARS e1>) <BURRY_PROCEDURE e2>
+	e1 = <CHANGE_VIEW 'main'> e1
+
+BURRY_PDESCRIPTION
+	';' e1 = <BURRY_PDESCRIPTION e1>
+	e1 /space_var/ e2 = <BR_PROC (<CP 'view'>) > <BURRY_PDESCRIPTION e1>
+	/section_param/(e1) e2 = <BURRY_PDESCRIPTION e1> <BURRY_PDESCRIPTION e2>
+	/params/(e4 /iden/(e1) e2) ':' /type/(sa e3) = + 
+		<APPEND_DESCRIPTION ('proc_' <CP 'view'>) (sa)> <BURRY_PDESCRIPTION /params/(e2) ':' /type/(sa e3)>
+	/var_params/(e4 /iden/(e1) e2) ':' /type/(sa e3) = + 
+		<APPEND_DESCRIPTION ('proc_' <CP 'view'>) ('v' sa)> <BURRY_PDESCRIPTION /var_params/(e2) ':' /type/(sa e3)>
+	e1 = e1 
+
+BURRY_PARAMS
+	/params/(e1) ':' /type/(e2) = /params/(<BURRY_PARAMS e1 ':' /type/(e2)>)
+	/var_params/(e1) ':' /type/(e2) = /var_params/(<BURRY_PARAMS e1 ':' /type/(e2)>)
+	/iden/(e1) e2 = <BURRY_SECTION /iden/(e1) e2>
+	e1 = e1
+
+BR_VAR
+	(v3) (e1) (e2) = <WARN_ERROR ('identifier exists allready') (e1)>
+	() (e1) (e2) = <BR 'var_' <CP 'view'> '_' e1 '=' e2> 
+	(e1) (e2) = <BR_VAR (<CP 'var_' <CP 'view'> '_' e1> <CP 'const_' e1>) (e1) (e2)>
+
+BR_CONST
+	(e1) (e2) = <BR 'const_' e1 '=' e2>
+
+BR_FUNC
+	(v3) (e1) (e2) = <WARN_ERROR ('identifier exists allready') (e1) >
+	() (e1) (sa e2) = <BR 'func_' e1 '=' ':' sa>
+	(e1) (e2) = <BR_FUNC (<CP 'var_main_' e1> <CP 'const_' e1> <CP 'func_' e1> <CP 'proc_' e1>) (e1) (e2)>
+
+BR_PROC
+	(v3) (e1) = <WARN_ERROR ('identifier exists allready') (e1) >
+	() (e1) = <BR 'proc_' e1 '=' ':'>
+	(e1) = <BR_PROC (<CP 'var_main_' e1> <CP 'const_' e1> <CP 'func_' e1> <CP 'proc_' e1>) (e1)>
+
+APPEND_DESCRIPTION
+	(e1) (e2) = <APPEND_DESCRIPTION (<CP e1>) (e1) (e2)>
+	(e3 ':' e4) (e1) (e2) = <RP e1 '=' e3 e2 ';' ':' e4> 
+	e1 = e1
