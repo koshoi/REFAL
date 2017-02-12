@@ -55,15 +55,20 @@ OPER_TRANSLATE
 	';' e1 = <OPER_TRANSLATE e1>
 	/block/('begin' e1 'end') = '{\n' <INC_DEPTH> <OPER_TRANSLATE e1> <DEC_DEPTH> <DEPTH> '\n}\n'
 	/operator_write/(e1) e2 = <WRITE_TRANSLATE e1> <OPER_TRANSLATE e2>
-	/operator_assignment/(e1) e2 = <ASSIGNMENT_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_assignment/(e1) e2 = <ASSIGNMENT_TRANSLATE e1> '\n' <OPER_TRANSLATE e2>
 	/operator_for/(e1) e2 = <FOR_TRANSLATE e1> <OPER_TRANSLATE e2>
 	/operator_procedure/(e1) e2 = <PROCEDURE_TRANSLATE e1> <OPER_TRANSLATE e2>
 	/operator_repeat/(e1) e2 = <REPEAT_TRANSLATE e1> <OPER_TRANSLATE e2>
 	/operator_case/(e1) e2 = <CASE_TRANSLATE e1> <OPER_TRANSLATE e2>
 	/operator_if/(e1) e2 = <IF_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_while/(e1) e2 = <WHILE_TRANSLATION e1> <OPER_TRANSLATE e2>
 	/operator/(e1) e2 = <OPER_TRANSLATE e1> <OPER_TRANSLATE e2>
 	/space_var/(e1) e2 = <VAR_TRANSLATE e1> <OPER_TRANSLATE e2>
 	e1 = e1
+
+WHILE_TRANSLATION
+	'while' /expression/(e1) 'do' /operator/(e2) = +
+		<DEPTH> <NORMSPACES 'while (' <EXPRESSION_TRANSLATE e1> ') {\n' <INC_DEPTH> <OPER_TRANSLATE e2> <DEC_DEPTH> <DEPTH> '}\n' >
 
 CASE_TRANSLATE
 	';' e1 = <CASE_TRANSLATE e1>
@@ -86,7 +91,7 @@ PROCEDURE_TRANSLATE
 	/expression/(e1) ',' e2 = <EXPRESSION_TRANSLATE e1> ',' <PROCEDURE_TRANSLATE e2>
 	/expression/(e1) = <EXPRESSION_TRANSLATE e1> ');'
 	/options/(e1) = <VOID <PROCEDURE_TRANSLATE e1> > 
-	/iden/(e1) e2 = <DEPTH> <NORMSPACES e1 <OPTIONS_TRANSLATE ('proc_') /iden/(e1) e2> > '\n'
+	/iden/(e1) e2 = <DEPTH> <NORMSPACES e1 <OPTIONS_TRANSLATE ('proc_') /iden/(e1) e2> > ';\n'
 
 FOR_TRANSLATE
 	'for' /operator_assignment/(/iden/(e1) e2) 'to' /expression/(e3) 'do' /operator/(e4) = + 

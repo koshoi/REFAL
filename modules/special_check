@@ -68,7 +68,7 @@ EXPRESSION_CHECK
 FOR_CHECK
 	/operator_assignment/(/iden/(e1) e2) e3 'do' /operator/(e4) = +
 		<SYNTAX_CHECK /operator_assignment/(/iden/(e1) e2)> e3 <PUSH_STACK e1> 'do' <SYNTAX_CHECK /operator/(e4)> <POP_STACK>
-	e1 = e1 <PRINT 'for-->'e1> 
+	e1 = e1 
 
 ASSIGNMENT_CHECK
 	/iden/(e1) ':=' e2 = /iden/(e1) ':=' e2 <UNTOUCHABILITY e1> <EXISTENCE e1> <VARIABLE e1>

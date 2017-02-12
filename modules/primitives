@@ -29,6 +29,6 @@ MARK_TYPE
 	e1 = <WARN_ERROR ('bad type name') (e1)>
 
 MARK_LOGIC
-	'true' e1 = /logic/('true') e1
-	'false' e1 = /logic/('false') e1
-	e1 = <WARN_ERROR ('no logic value found') (e1)>
+	e1 s('= ')a 'true' e2 = <MARK_LOGIC e1 sa /logic/('true') e2>
+	e1 s((LD))a 'false' e2 = e1 sa <MARK_LOGIC /logic/('false') e2> 
+	e1 = e1

@@ -8,6 +8,7 @@ file_arr=(
 
 echo '' > final.ref
 
+clear
 cd modules
 
 for i in `seq 1 ${#file_arr[@]}`; do
@@ -18,5 +19,4 @@ done
 cd ..
 
 echo 'END' >> final.ref
-clear
-cat file.pas | ./refal2 final.ref
+

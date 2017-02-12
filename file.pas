@@ -18,6 +18,7 @@ begin
 	aa:=b;
 end;
 begin
+	while (aa > a) do aa:=aa+1;
 	proc1(aa, bb);
 	aa:=func1(aa, bb);
 end.

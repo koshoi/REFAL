@@ -1,11 +1,11 @@
 GO 	
-	= <BR 'output=open'> <BR 'untouchable='> <BR 'depth='> <PRINT <TRANSLATE <SPECIAL_CHECK <START_BURRY <CHECK_STRUCTURE <NORMTERMS <MARK_EVERYTHING <GIVE_TEXT> > > > > > > >
+	= <BR 'output=open'> <BR 'untouchable='> <BR 'depth='> <PRINT <FIN <TRANSLATE <SPECIAL_CHECK <START_BURRY <CHECK_STRUCTURE <NORMTERMS <MARK_EVERYTHING <GIVE_TEXT> > > > > > > > >
 
 GIVE_TEXT
 	= <NORMALIZE <READ_WHILE <CARD> > >
 
 MARK_EVERYTHING
-	e1 = <MARK_OPERATORS <MARK_IN_BLOCK <MARK_SPACES <BRACKETERIZE <MUL_OPERATION e1 > > > > >
+	e1 = <MARK_OPERATORS <MARK_IN_BLOCK <MARK_SPACES <BRACKETERIZE <MARK_LOGIC <MUL_OPERATION e1 > > > > > >
 
 WARN_ERROR
 	e1 = <WARN_ERROR2 (<CP 'output'>) e1 > <RP 'output=closed'>
@@ -37,6 +37,11 @@ STRUCT_INC
 
 MARK_IN_BLOCK
 	e1 /block/(e2) e3 = e1 /block/(<SUM_OPERATION <COMPARE_OPERATION <MARK_IN_BLOCK e2> > >) <MARK_IN_BLOCK e3>
+	e1 = e1
+
+FIN
+	e1 ' true' e2 = <FIN e1 ' 1' e2 >
+	e1 ' false' e2 = e1 ' 0' <FIN e2>
 	e1 = e1
 
 LAZY

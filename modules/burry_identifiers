@@ -39,7 +39,7 @@ BURRY_FUNCTION
 BURRY_FDESCRIPTION
 	';' e1 = <BURRY_FDESCRIPTION e1>
 	/section_param/(e1) ':' /type/(e2) = <BURRY_FDESCRIPTION e1>
-	/section_param/(e1) e2 = <PRINT e2> <BURRY_FDESCRIPTION e1> <BURRY_FDESCRIPTION e2>
+	/section_param/(e1) e2 = <BURRY_FDESCRIPTION e1> <BURRY_FDESCRIPTION e2>
 	/params/(e4 /iden/(e1) e2) ':' /type/(sa e3) = + 
 		<APPEND_DESCRIPTION ('func_' <CP 'view'>) (sa)> <BURRY_FDESCRIPTION /params/(e2) ':' /type/(sa e3)>
 	/var_params/(e4 /iden/(e1) e2) ':' /type/(sa e3) = + 
