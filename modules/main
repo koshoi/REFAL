@@ -1,5 +1,5 @@
 GO 	
-	= <BR 'output=open'> <BR 'untouchable='> <PRETTY_PRINT () <SPECIAL_CHECK <START_BURRY <CHECK_STRUCTURE <NORMTERMS <MARK_EVERYTHING <GIVE_TEXT> > > > > > >
+	= <BR 'output=open'> <BR 'untouchable='> <BR 'depth='> <PRINT <TRANSLATE <SPECIAL_CHECK <START_BURRY <CHECK_STRUCTURE <NORMTERMS <MARK_EVERYTHING <GIVE_TEXT> > > > > > > >
 
 GIVE_TEXT
 	= <NORMALIZE <READ_WHILE <CARD> > >
@@ -24,7 +24,7 @@ STRUCT_PRINT
 	e1 = 
 
 NOLABEL
-	e1 s(F)a (e2) e3 = e1 <NOLABEL e2 e3>
+	e1 s(F)a (e2) e3 = <NORMSPACES e1 ' ' <NOLABEL e2 e3> >
 	e1 = e1
 
 PRETTY_PRINT

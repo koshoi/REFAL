@@ -1,4 +1,7 @@
 SPECIAL_CHECK
+	e1 = <VOID <START_CHECK e1> > e1
+
+START_CHECK
 	e1 /iden/(e2) e3 = <CHANGE_VIEW e2> <SPECIAL_CHECK e3> <CHANGE_VIEW 'main'>
 	e1 /operator/(/block/(e2)) e3 = <SPECIAL_CHECK e1> /operator/(/block/(<EXPRESSION_CHECK <SYNTAX_CHECK e2>>)) <SPECIAL_CHECK e3>
 	e1 s(/space_function//space_procedure/)a (e2) e3 = e1 sa(<SPECIAL_CHECK e2>) <SPECIAL_CHECK e3>
@@ -26,7 +29,7 @@ EXISTENCE
 VARIABLE
 	() (e1) = <WARN_ERROR ('not a variable') (e1)>
 	(v1) (e2) =
-	e1 = <VARIABLE (<CP 'var_' <CP 'view'> '_' e1>) (e1)>
+	e1 = <VARIABLE (<CP 'var_' <CP 'view'> '_' e1> <CP 'var_main_' e1>) (e1)>
 
 PROCEDURE
 	() (e1) = <WARN_ERROR ('not a procedure') (e1)>
@@ -53,6 +56,7 @@ SYNTAX_CHECK
 	/operator_assignment/(e1) = /operator_assignment/(<ASSIGNMENT_CHECK e1>)
 	/operator_procedure/(e1) = /operator_procedure/(<PROC_CHECK e1>)
 	e1 /operator/(e2) e3 = e1 <SYNTAX_CHECK /operator/(e2) e3>
+	e1 s(F)a (e2) e3 = e1 sa(<SYNTAX_CHECK e2>) <SYNTAX_CHECK e3>
 	e1 = e1
 
 EXPRESSION_CHECK

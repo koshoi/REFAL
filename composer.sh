@@ -1,6 +1,10 @@
 #!/bin/bash
 
-file_arr=('labels' 'main' 'normalize' 'spaces' 'primitives' 'operations' 'operators' 'expressions' 'check_structure' 'burry_identifiers' 'special_check');
+file_arr=(
+	'labels' 'main' 'normalize' 
+	'spaces' 'primitives' 'operations' 
+	'operators' 'expressions' 'check_structure' 
+	'burry_identifiers' 'special_check' 'translation');
 
 echo '' > final.ref
 
@@ -14,5 +18,5 @@ done
 cd ..
 
 echo 'END' >> final.ref
-
+clear
 cat file.pas | ./refal2 final.ref

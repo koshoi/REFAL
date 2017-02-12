@@ -1,5 +1,5 @@
 req START
-	EXTRN Prout, Card, Br, Cp, Rp
+	EXTRN Prout, Card, Br, Cp, Rp, Dgall
 	ENTRY Go
 
 space_var

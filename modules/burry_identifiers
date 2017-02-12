@@ -1,5 +1,5 @@
 START_BURRY
-	e1 = <CHANGE_VIEW 'main'> <BURRY_IDENTIFIERS e1>
+	e1 = <CHANGE_VIEW 'main'> <VOID <BURRY_IDENTIFIERS e1> > e1
 
 CHANGE_VIEW
 	e1 = <RP 'view=' e1>

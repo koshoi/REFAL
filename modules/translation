@@ -1,0 +1,128 @@
+TRANSLATE
+	';' e1 = <TRANSLATE e1>
+	/space_prog/(e1) e2 = <TRANSLATE e2>
+	/space_const/(e1) e2 = <CONST_TRANSLATE e1> <TRANSLATE e2>
+	/space_var/(e1) e2 = <VAR_TRANSLATE e1> <TRANSLATE e2>
+	/space_procedure/(e1) e2 = <FIX <PROC_TRANSLATE e1> > <TRANSLATE e2>
+	/space_function/(e1) e2 = <FIX <FUNC_TRANSLATE e1> > <TRANSLATE e2>
+	/operator/(e1) e2 = 'int main() ' <OPER_TRANSLATE e1>
+	e1 = '\n\n\n' e1
+
+FIX
+	e1 ', )' e2 = e1 ')' e2
+	e1 = e1
+
+INC_DEPTH
+	= <RP 'depth=' <CP 'depth'> '  '>
+
+DEC_DEPTH
+	(e1 '  ') = <RP 'depth=' e1>
+	= <DEC_DEPTH (<CP 'depth'>)>
+
+DEPTH
+	= <CP 'depth'>
+
+CONST_TRANSLATE
+	'const' e1 = <CONST_TRANSLATE e1>
+	';' e1 = ';\n' <CONST_TRANSLATE e1>
+	/iden/(e1) '=' /const/(e2) e3 = 'const int ' e1 '=' e2 <CONST_TRANSLATE e3>
+	e1 = 
+
+VAR_TRANSLATE 
+	',' e2 = ', ' <VAR_TRANSLATE e2>
+	':' = ';\n'
+	/iden/(e1) e2 ':' /type/(e3) = <DEPTH> 'int ' <VAR_TRANSLATE /iden/(e1) e2 ':'>
+	/iden/(e1) e2 ':' = e1 <VAR_TRANSLATE e2 ':'>
+	/section_var/(e1) e2 = <VAR_TRANSLATE e1> <VAR_TRANSLATE e2>
+	'var' e1 = <VAR_TRANSLATE e1>
+	e1 = 
+
+PROC_TRANSLATE
+	'procedure' /iden/(e1) e2 = 'void ' e1 '('  <PROC_TRANSLATE e2>
+	';' e1 = <PROC_TRANSLATE e1>
+	/section_param/(e1) e2 = <PROC_TRANSLATE e1> <PROC_TRANSLATE e2>
+	/params/(/iden/(e2) ',' e3) e4 = 'int ' e2 ', ' <PROC_TRANSLATE /params/(e3)>
+	/params/(/iden/(e1) e2) e3 = 'int ' e1 ', ' 
+	/var_params/(/iden/(e2) ',' e3) e4 = 'int *' e2 ', ' <PROC_TRANSLATE /params/(e3)>
+	/var_params/(/iden/(e1) e2) e3 = 'int *' e1 ', '
+	/space_var/(e1) /operator/(/block/('begin' e2 'end')) = ')' <OPER_TRANSLATE /operator/(/block/('begin' /space_var/(e1) e2 'end'))>
+	e1 = '\n' e1
+
+FUNC_TRANSLATE
+	'function' /iden/(e1) e2 ':' /type/(e3) e4 = 'integer ' e1 '(' <PROC_TRANSLATE e2 e4>
+
+OPER_TRANSLATE
+	';' e1 = <OPER_TRANSLATE e1>
+	/block/('begin' e1 'end') = '{\n' <INC_DEPTH> <OPER_TRANSLATE e1> <DEC_DEPTH> <DEPTH> '\n}\n'
+	/operator_write/(e1) e2 = <WRITE_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_assignment/(e1) e2 = <ASSIGNMENT_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_for/(e1) e2 = <FOR_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_procedure/(e1) e2 = <PROCEDURE_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_repeat/(e1) e2 = <REPEAT_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_case/(e1) e2 = <CASE_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator_if/(e1) e2 = <IF_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/operator/(e1) e2 = <OPER_TRANSLATE e1> <OPER_TRANSLATE e2>
+	/space_var/(e1) e2 = <VAR_TRANSLATE e1> <OPER_TRANSLATE e2>
+	e1 = e1
+
+CASE_TRANSLATE
+	';' e1 = <CASE_TRANSLATE e1>
+	'endcase' = 
+	/expression/(e1) ':' /operator/(e2) = <DEPTH> <NORMSPACES 'case ' <EXPRESSION_TRANSLATE e1> ':' <OPER_TRANSLATE e2> > '\n'
+	/variant/(e1) e2 = <CASE_TRANSLATE e1> <CASE_TRANSLATE e2>
+	'case' /expression/(e1) 'of' e2 = +
+		<DEPTH> <NORMSPACES 'switch(' <EXPRESSION_TRANSLATE e1> > ') {\n' <INC_DEPTH> <CASE_TRANSLATE e2> <DEC_DEPTH> '\n' <DEPTH> '}\n'
+	e1 = e1
+
+IF_TRANSLATE
+	'if' /expression/(e1) 'then' /operator/(e2) 'else' /operator/(e3) = +
+		<DEPTH> <NORMSPACES 'if' <EXPRESSION_TRANSLATE e1> ' then' <OPER_TRANSLATE e2> > '\n' <DEPTH> <NORMSPACES 'else'<OPER_TRANSLATE e3>> '\n'
+
+REPEAT_TRANSLATE
+	'repeat' /list/(e1) e3 'until' /expression/(e2) = + 
+		<DEPTH> 'do {\n' <INC_DEPTH> <OPER_TRANSLATE e1> <DEC_DEPTH> '\n' <DEPTH> <NORMSPACES '} while !' <EXPRESSION_TRANSLATE e2> > '\n'
+
+PROCEDURE_TRANSLATE
+	/expression/(e1) ',' e2 = <EXPRESSION_TRANSLATE e1> ',' <PROCEDURE_TRANSLATE e2>
+	/expression/(e1) = <EXPRESSION_TRANSLATE e1> ');'
+	/options/(e1) = <VOID <PROCEDURE_TRANSLATE e1> > 
+	/iden/(e1) e2 = <DEPTH> <NORMSPACES e1 <OPTIONS_TRANSLATE ('proc_') /iden/(e1) e2> > '\n'
+
+FOR_TRANSLATE
+	'for' /operator_assignment/(/iden/(e1) e2) 'to' /expression/(e3) 'do' /operator/(e4) = + 
+		<DEPTH> <NORMSPACES 'for (int ' <ASSIGNMENT_TRANSLATE /iden/(e1) e2> e1 ' <' <EXPRESSION_TRANSLATE e3> ';' e1 '++) ' <OPER_TRANSLATE e4> >  
+
+ASSIGNMENT_TRANSLATE
+	/iden/(e1) ':=' /expression/(e2) = <DEPTH> <NORMSPACES e1 ' =' <EXPRESSION_TRANSLATE e2> > ';'
+
+WRITE_TRANSLATE
+	'writeln' /list/(e1) = <DEPTH> <NORMSPACES <SWAP_NAMES 'printf(' '"' <LIST_TRANSLATE e1> '",' <WRITE_TRANSLATE e1> ');\n' > >
+	/expression/(e1) ',' e2 = <EXPRESSION_TRANSLATE e1> ',' <WRITE_TRANSLATE e2>
+	/expression/(e1) = <EXPRESSION_TRANSLATE e1>
+	e1 = e1
+
+LIST_TRANSLATE
+	/expression/(e1) ',' e2 = '%d' ',' <LIST_TRANSLATE e2>
+	/expression/(e1) = '%d'
+	
+EXPRESSION_TRANSLATE
+	e1 /function_call/(e2) e3 = <EXPRESSION_TRANSLATE e1 <OPTIONS_TRANSLATE ('func_') e2> e3>
+	e1 s(F)a (e2) e3 = <NOLABEL e1 sa (<EXPRESSION_TRANSLATE e2>) <EXPRESSION_TRANSLATE e3> >
+	e1 = <NOLABEL e1>
+
+OPTIONS_TRANSLATE
+	('func_') /iden/(e1) e2 = '(' <OPTIONS_TRANSLATE (<CP 'func_' e1>) (e2)> ')'
+	('proc_') /iden/(e1) e2 = '(' <OPTIONS_TRANSLATE (<CP 'proc_' e1>) (e2)> ')'
+	(s('ib')a ';' e1) (/options/(/expression/(e2) ',' e3)) = <EXPRESSION_TRANSLATE e2> ', ' <OPTIONS_TRANSLATE (e1) (/options/(e3))>
+	(s('ib')a ';:' e1) (/options/(/expression/(e2))) = <EXPRESSION_TRANSLATE e2>
+	('v' s('ib')a ';:' e1) (/options/(/expression/(e2))) = '&' <EXPRESSION_TRANSLATE e2>
+	('v' s('ib')a ';' e1) (/options/(/expression/(e2) ',' e3)) = '&' <EXPRESSION_TRANSLATE e2> ', ' <OPTIONS_TRANSLATE (e1) (/options/(e3))>
+	e1 = e1
+
+SWAP_NAMES
+	e1 ' div ' e2 = <SWAP_NAMES e1> '/' <SWAP_NAMES e2>
+	e1 ' mod ' e2 = <SWAP_NAMES e1> '%' <SWAP_NAMES e2>
+	e1 ' or ' e2 = <SWAP_NAMES e1> '||' <SWAP_NAMES e2>
+	e1 ' and ' e2 = <SWAP_NAMES e1> '&&' <SWAP_NAMES e2>
+	e1 '=' e2 = e1 '==' <SWAP_NAMES e2>
+	e1 = e1

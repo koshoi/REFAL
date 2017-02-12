@@ -5,19 +5,19 @@ const
 var
 	aa, bb, i : integer;
 	cc : boolean;
-procedure proc1(var aa: integer)
+procedure proc1(aa: integer; var bb: boolean)
 var
+	abc : integer;
 begin
-	writeln(aa);
-	aa:=i;
+	writeln(aa div 2, bb);
+	aa:=a;
 end;
-function func1(var aa: integer) : integer
+function func1(var aa, bb: integer) : integer
 var
 begin
 	aa:=b;
 end;
 begin
-	for i:=1 to 10 do proc1(aa);
-	i:=func1(aa);
-	proc1(aa);
+	proc1(aa, bb);
+	aa:=func1(aa, bb);
 end.
